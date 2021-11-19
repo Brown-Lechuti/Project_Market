@@ -1,0 +1,21 @@
+﻿@page
+@model Project_Market.Areas.Identity.Pages.Account.Manage.UploadFileModel
+@{
+    ViewData["Title"] = "My photos";
+    ViewData["ActivePage"] = ManageNavPages.UploadFileModel;
+}
+<h4>@ViewData["Title"]</h4>
+@*<partial name="_StatusMessage" model="Model.StatusMessage" />*@
+<div class="row">
+    <div class="col-md-6">
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" asp-for="Upload" />
+            <input type="submit" />
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
