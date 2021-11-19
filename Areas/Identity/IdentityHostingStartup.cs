@@ -16,10 +16,14 @@ namespace Project_Market.Areas.Identity
         {
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<Project_MarketContext>(options =>
-                    options.UseSqlite(
-                        context.Configuration.GetConnectionString("Project_MarketContextConnection")));
-
-                services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    options.UseSqlServer(
+                        context.Configuration.GetConnectionString("Project_MarketContextConnection"),
+                sqlServerOptionsAction: sqlOptions =>
+                {
+                    sqlOptions.EnableRetryOnFailure();
+                })); 
+  
+                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<Project_MarketContext>();
             });
         }

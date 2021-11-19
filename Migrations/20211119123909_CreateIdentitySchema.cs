@@ -7,7 +7,7 @@ namespace Project_Market.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            /*migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -187,7 +187,7 @@ namespace Project_Market.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true);*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
