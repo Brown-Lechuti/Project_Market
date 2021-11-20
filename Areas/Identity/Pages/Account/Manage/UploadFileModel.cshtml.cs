@@ -14,6 +14,10 @@ namespace Project_Market.Areas.Identity.Pages.Account.Manage
     {
         private IHostingEnvironment _environment;
         private readonly IWebHostEnvironment webHostEnvironment;
+
+        [TempData]
+        public string Status { get; set; }
+
         public UploadFileModel(IWebHostEnvironment hostEnvironment)
         {
             webHostEnvironment = hostEnvironment;
@@ -26,7 +30,10 @@ namespace Project_Market.Areas.Identity.Pages.Account.Manage
             using (var fileStream = new FileStream(file, FileMode.Create))
             {
                 await Upload.CopyToAsync(fileStream);
+                Status = "Your image has been uploaded!";
             }
+
+            
         }
     }
 }

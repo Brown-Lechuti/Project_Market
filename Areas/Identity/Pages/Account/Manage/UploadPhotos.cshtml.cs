@@ -6,12 +6,40 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace Project_Market.Areas.Identity.Pages.Account.Manage
 {
     public partial class UploadPhotosModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IWebHostEnvironment webHostEnvironment;
+
+        public UploadPhotosModel(IWebHostEnvironment webHostEnvironment)
+        {
+            this.webHostEnvironment = webHostEnvironment;
+        }
+
+        [BindProperty]
+        public List<string> ImageList { get; set; }
+        public IActionResult OnGet()
+        {
+            var provider = new PhysicalFileProvider(webHostEnvironment.WebRootPath);
+            var contents = provider.GetDirectoryContents(Path.Combine( "images"));
+            var objFiles = contents.OrderBy(m => m.LastModified);
+
+            ImageList = new List<string>();
+            foreach (var item in objFiles.ToList())
+            {
+                ImageList.Add(item.Name);
+            }
+            return Page();
+        }
+  
+    }
+ }
+       /* private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
         public UploadPhotosModel(
@@ -90,6 +118,6 @@ namespace Project_Market.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your photo(s) has been loaded";
             return RedirectToPage();
-        }
-    }
-}
+        }*/
+    
+
