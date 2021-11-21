@@ -4,12 +4,14 @@
     ViewData["Title"] = "Upload your photos";
     ViewData["ActivePage"] = ManageNavPages.UploadFileModel;
 }
-<h4>@ViewData["Title"]</h4>
+<h4>@ViewData["Title"]</h4> 
+<p>Choose image file(s) then click submit button to upload</p>
 <partial name="_StatusMessage" model="Model.Status" />
 <div class="row">
     <div class="col-md-6">
+
         <form method="post" enctype="multipart/form-data">
-            <input type="file" asp-for="Upload" />
+            <input type="file" name="Upload" multiple="multiple" />
             <input type="submit" />
         </form>
     </div>

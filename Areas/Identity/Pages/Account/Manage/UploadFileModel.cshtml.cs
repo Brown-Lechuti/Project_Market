@@ -26,22 +26,26 @@ namespace Project_Market.Areas.Identity.Pages.Account.Manage
         {
             webHostEnvironment = hostEnvironment;
         }
-        [BindProperty]
-        public IFormFile Upload { get; set; }
+        [BindProperty]     
+        public IFormFile[] Upload { get; set; } 
         public async Task OnPostAsync()
         {
 
             if (Upload != null)
             {
-
-                var fileName = User.Identity.Name + Guid.NewGuid().ToString() + "_" + Path.GetFileName(Upload.FileName);
-
-                var imagePath = Path.Combine(webHostEnvironment.WebRootPath, "images", fileName);
-                using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                foreach(IFormFile photo in Upload)
                 {
-                    await Upload.CopyToAsync(fileStream);
-                    Status = "Your image has been uploaded!";
+                     var fileName = User.Identity.Name + Guid.NewGuid().ToString() + "_" + Path.GetFileName(photo.FileName);
+
+                     var imagePath = Path.Combine(webHostEnvironment.WebRootPath, "images", fileName);
+                     using (var fileStream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(fileStream);
+                       
+                    }
                 }
+                Status = "Images uploaded!";
+
             }
             else
             {
