@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/project-marketdbserver/databases/Project_Market_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:Project_MarketContextConnection",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}
