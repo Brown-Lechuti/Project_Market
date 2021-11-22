@@ -3,6 +3,10 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "ConnectionStrings:Project_MarketContextConnection"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "DefaultEndpointsProtocol=https;AccountName=storebbl;AccountKey=LCC4STdXqimJmE2JpmD1QbKnXARGHAkVimaAyy8odI3gxo4sncLG6f4hm7Grn5695liG6bpX7Fv7UPA67qzvdQ==;EndpointSuffix=core.windows.net"
     }
   }
 }
