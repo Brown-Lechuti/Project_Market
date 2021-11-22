@@ -1,4 +1,19 @@
 ﻿@page
 @model Project_Market.Pages.toAzure.DisplayModel
 @{
+    ViewData["Title"] = "My photos";
 }
+
+<h4>@ViewData["Title"]</h4>
+<div class="row">
+    <div class="col container">
+        <div class="col-10">
+            @foreach (var items in Model.ImageList)
+            {
+                var iPhotoUrl =  items;
+                <img class="float-left p-2" src="@iPhotoUrl" height="150" />
+
+            }
+        </div>
+    </div>
+</div>
