@@ -11,7 +11,7 @@
         <div class="col-10">
             @foreach (var items in Model.ImageList)
             {
-                var iPhotoUrl = "/images/" + items;
+                var iPhotoUrl = items;
             <img class="float-left p-2" src="@iPhotoUrl" height="150" />
 
             }

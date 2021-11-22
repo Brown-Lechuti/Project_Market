@@ -9,42 +9,62 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage;
 
 namespace Project_Market.Areas.Identity.Pages.Account.Manage
 {
-    public partial class UploadPhotosModel : PageModel
+    
+ public class UploadPhotosModel : PageModel
     {
-        private readonly IWebHostEnvironment webHostEnvironment;
+
+        private IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
 
-        public UploadPhotosModel(IWebHostEnvironment webHostEnvironment)
+        public UploadPhotosModel(IConfiguration Configuration)
         {
-            this.webHostEnvironment = webHostEnvironment;
+            _configuration = Configuration;
         }
+
 
         [BindProperty]
         public List<string> ImageList { get; set; }
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
-            var provider = new PhysicalFileProvider(webHostEnvironment.WebRootPath);
-            var contents = provider.GetDirectoryContents(Path.Combine( "images"));
-            var objFiles = contents.OrderBy(m => m.LastModified);
+            string userid = User.Identity.Name;
+            string newString = userid.Replace("@", string.Empty);
+            string uniqueContiner_ = newString.Replace(".", string.Empty);
 
+            BlobContinuationToken continuationToken = null;
+            string blobstorageconnection = "DefaultEndpointsProtocol=https;AccountName=storebbl;AccountKey=0i1Fv/O3avNyTTehyTKqGcQjmuyivvDT6H9gNCx8dCmIZGNfPIqCeoIPANXTDW+WuvFqoq3pEGnjyFW7eKtmzA==;EndpointSuffix=core.windows.net";
+
+            CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(blobstorageconnection);
+            CloudBlobClient blobClient = cloudStorageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference(uniqueContiner_);
+
+            var blobs = blobClient.GetContainerReference(uniqueContiner_).ListBlobsSegmentedAsync(continuationToken);
+            var result = blobs.Result;
+            continuationToken = result.ContinuationToken;
+            var images = result.Results.ToList();
+  
             ImageList = new List<string>();
-            foreach (var item in objFiles.ToList())
+
+            foreach (var blobItem in images)
             {
-                if (item.Name.Contains(User.Identity.Name) == true)//Only return images with current user's id which their unique email address
-                {
-                    ImageList.Add(item.Name);
-                }
-                
+                // A flat listing operation returns only blobs, not virtual directories.
+                var blob = (CloudBlockBlob)blobItem;
+                blob.Properties.ContentType = "image/jpeg";
+                _ = blob.SetPropertiesAsync();
+                ImageList.Add($"{blob.Uri}");
+
             }
+
             return Page();
         }
-  
     }
- }
+}
      
     
 
